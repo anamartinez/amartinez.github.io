@@ -5,6 +5,14 @@
   </head>
 
   <body>
+    <h1>Setup:</h1>
+    <ul>
+      <li>This only works locally, so make sure zendesk is running under https://dev.zd-dev.com/</li>
+      <li>Create a new OAuth app</li>
+      <li>The default identifier is html_example</li>
+      <li>The return URI should be https://anamartinez.github.io/oauth</li>
+    </ul>
+
     <form action="https://dev.zd-dev.com/oauth/authorizations/new" id="authorize" method="GET">
       <input type="hidden" name="redirect_uri" value="https://anamartinez.github.io/oauth" />
       <input type="hidden" name="response_type" value="token" />
