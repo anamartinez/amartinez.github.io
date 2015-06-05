@@ -42,7 +42,8 @@
         $.ajax(url, {
           method: method,
           beforeSend: function(xhr) {
-            xhr.setRequestHeader("Authorization", "Bearer " + accessToken);              }
+            xhr.setRequestHeader("Authorization", "Bearer " + accessToken());
+          }
         }).done(function(data, textStatus, xhr) {
           $("#response_area").html(JSON.stringify(data));
           $("#response").show()
@@ -67,8 +68,8 @@
           $("#error").html(getHashParameter("error_description"));
 //            $("#authorize").show();
         } else if(token) {
-          $("#token").html("Token: " + accessToken);
-          $("#scope").html("Scope: " + token_scope);
+          $("#token").html("Token: " + accessToken());
+          $("#scope").html("Scope: " + tokenScope());
         }
 
         $('#read').click(function () {
