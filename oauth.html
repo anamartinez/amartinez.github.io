@@ -20,7 +20,9 @@
 
       #api_request {
         display: none;
+        border-top: 1px solid #eee;
       }
+
     </style>
   </head>
 
@@ -57,19 +59,17 @@
 
       <div id="api_request">
         <p id="error"></p>
-        <p id="token"></p>
-        <p id="scope"></p>
+        <h4 id="token"></h4>
+        <h4 id="scope"></h4>
 
-        <p> Test requests </p>
-        <button id="read">READ</button>
-        <button id="write">WRITE</button>
+        <h3> Test scopes: </h3>
+        <button id="read" class="btn btn-lg btn-primary">READ</button>
+        <button id="write" class="btn btn-lg btn-primary">WRITE</button>
 
         <p id="response" style="display: none;">
           <span style="float: left; margin-right: 10px;">Response:</span>
           <p id="response_area" style="width: 500px; height:200px;"></p>
         </p>
-
-        <img id="spinner" src="https://raw.github.com/sjhcockrell/spinners/master/gif/spinner_16.gif" style="display:none;" />
       </div>
     </div>
 
@@ -118,8 +118,8 @@
 
         if(error) {
           $("#error").html(getHashParameter("error_description"));
-        } else if(token.length) {
-          $("#token").html("Token: " + accessToken());
+        } else if(accessToken().length) {
+          $("#token").html("Token: " + accessToken() );
           $("#scope").html("Scope: " + tokenScope());
 
           $("#api_request").show();
