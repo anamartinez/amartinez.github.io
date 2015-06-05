@@ -27,6 +27,31 @@
         return decodeURIComponent((new RegExp('[#|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.hash)||[,""])[1].replace(/\+/g, '%20'))||null;
       }
 
+      function makeRequest(url, method) {
+        var spinner = $("#spinner");
+        spinner.show();
+
+        $.ajax(url, {
+          method: method,
+          beforeSend: function(xhr) {
+            xhr.setRequestHeader("Authorization", "Bearer " + token);              }
+        }).done(function(data, textStatus, xhr) {
+          $("#response_area").html(JSON.stringify(data));
+          $("#response").show()
+        }).fail(function(xhr, textStatus, errorThrown) {
+          console.log(xhr);
+          console.log(textStatus);
+          console.log(errorThrown);
+
+          $("#response_area").html("An error occured, check the console.");
+          $("#response").show()
+        }).complete(function() {
+          spinner.hide();
+          $("#authorize").show();
+        });
+      }
+
+
       $(document).ready(function() {
         var error = getHashParameter("error");
         var token = getHashParameter("access_token");
@@ -41,27 +66,7 @@
         }
 
         $('#read').click(function () {
-          var spinner = $("#spinner");
-          spinner.show();
-
-          $.ajax('https://dev.zd-dev.com/api/v2/tickets.json', {
-            method: 'GET',
-            beforeSend: function(xhr) {
-              xhr.setRequestHeader("Authorization", "Bearer " + token);              }
-          }).done(function(data, textStatus, xhr) {
-            $("#response_area").html(JSON.stringify(data));
-            $("#response").show()
-          }).fail(function(xhr, textStatus, errorThrown) {
-            console.log(xhr);
-            console.log(textStatus);
-            console.log(errorThrown);
-
-            $("#response_area").html("An error occured, check the console.");
-            $("#response").show()
-          }).complete(function() {
-            spinner.hide();
-            $("#authorize").show();
-          });
+          makeRequest('https://dev.zd-dev.com/api/v2/tickets.json', 'GET');
         });
       });
     </script>
