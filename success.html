@@ -35,12 +35,13 @@
         return getHashParameter("scope");
       }
 
-      function makeRequest(url, method) {
+      function makeRequest(url, method, data) {
         var spinner = $("#spinner");
         spinner.show();
 
         $.ajax(url, {
           method: method,
+          data: data,
           beforeSend: function(xhr) {
             xhr.setRequestHeader("Authorization", "Bearer " + accessToken());
           }
@@ -60,13 +61,11 @@
         });
       }
 
-
       $(document).ready(function() {
         var error = getHashParameter("error");
 
         if(error) {
           $("#error").html(getHashParameter("error_description"));
-//            $("#authorize").show();
         } else if(token) {
           $("#token").html("Token: " + accessToken());
           $("#scope").html("Scope: " + tokenScope());
@@ -74,6 +73,12 @@
 
         $('#read').click(function () {
           makeRequest('https://dev.zd-dev.com/api/v2/tickets.json', 'GET');
+        });
+
+
+        $('#write').click(function () {
+          var data = {"ticket": {"subject": "My printer is on fire!", "comment": { "body": "The smoke is very colorful." }}}
+          makeRequest('https://dev.zd-dev.com/api/v2/tickets.json', 'POST', data);
         });
       });
     </script>
