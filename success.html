@@ -28,11 +28,11 @@
       }
 
       function accessToken() {
-        getHashParameter("access_token");
+        return getHashParameter("access_token");
       }
 
       function tokenScope() {
-        getHashParameter("scope");
+        return getHashParameter("scope");
       }
 
       function makeRequest(url, method) {
