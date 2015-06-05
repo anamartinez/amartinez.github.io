@@ -54,15 +54,15 @@
 
       $(document).ready(function() {
         var error = getHashParameter("error");
-        var token = getHashParameter("access_token");
-        var scope = getHashParameter("scope");
+        var access_token = getHashParameter("access_token");
+        var token_scope = getHashParameter("scope");
 
         if(error) {
           $("#error").html(getHashParameter("error_description"));
 //            $("#authorize").show();
         } else if(token) {
-          $("#token").html("Token: " + token);
-          $("#scope").html("Scope: " + scope);
+          $("#token").html("Token: " + access_token);
+          $("#scope").html("Scope: " + token_scope);
         }
 
         $('#read').click(function () {
