@@ -27,6 +27,14 @@
         return decodeURIComponent((new RegExp('[#|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.hash)||[,""])[1].replace(/\+/g, '%20'))||null;
       }
 
+      function accessToken() {
+        getHashParameter("access_token");
+      }
+
+      function tokenScope() {
+        getHashParameter("scope");
+      }
+
       function makeRequest(url, method) {
         var spinner = $("#spinner");
         spinner.show();
@@ -34,7 +42,7 @@
         $.ajax(url, {
           method: method,
           beforeSend: function(xhr) {
-            xhr.setRequestHeader("Authorization", "Bearer " + token);              }
+            xhr.setRequestHeader("Authorization", "Bearer " + accessToken);              }
         }).done(function(data, textStatus, xhr) {
           $("#response_area").html(JSON.stringify(data));
           $("#response").show()
@@ -54,14 +62,12 @@
 
       $(document).ready(function() {
         var error = getHashParameter("error");
-        var access_token = getHashParameter("access_token");
-        var token_scope = getHashParameter("scope");
 
         if(error) {
           $("#error").html(getHashParameter("error_description"));
 //            $("#authorize").show();
         } else if(token) {
-          $("#token").html("Token: " + access_token);
+          $("#token").html("Token: " + accessToken);
           $("#scope").html("Scope: " + token_scope);
         }
 
