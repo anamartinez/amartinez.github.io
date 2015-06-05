@@ -1,12 +1,12 @@
 <html>
   <head>
     <title>OAuth Grant Test</title>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   </head>
 
   <body>
     <form action="https://dev.zd-dev.com/oauth/authorizations/new" id="authorize" method="GET">
-      <input type="hidden" name="redirect_uri" value="https://anamartinez.github.io/success" />
+      <input type="hidden" name="redirect_uri" value="https://anamartinez.github.io/oauth" />
       <input type="hidden" name="response_type" value="token" />
 
       <label>Client ID</label>
@@ -23,5 +23,83 @@
 
       <input type="submit" value="Authorize!" />
     </form>
+
+    <p id="error"></p>
+    <p id="token"></p>
+    <p id="scope"></p>
+
+    <p> Test requests </p>
+    <button id="read">READ</button>
+    <button id="write">WRITE</button>
+
+
+    <p id="response" style="display: none;">
+      <span style="float: left; margin-right: 10px;">Response:</span>
+      <p id="response_area" style="width: 500px; height:200px;"></p>
+    </p>
+
+    <img id="spinner" src="https://raw.github.com/sjhcockrell/spinners/master/gif/spinner_16.gif" style="display:none;" />
+
+    <script type="text/javascript">
+      // http://stackoverflow.com/questions/1403888/get-url-parameter-with-jquery
+      function getHashParameter(name) {
+        return decodeURIComponent((new RegExp('[#|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.hash)||[,""])[1].replace(/\+/g, '%20'))||null;
+      }
+
+      function accessToken() {
+        return getHashParameter("access_token");
+      }
+
+      function tokenScope() {
+        return getHashParameter("scope");
+      }
+
+      function makeRequest(url, method, data) {
+        var spinner = $("#spinner");
+        spinner.show();
+
+        $.ajax(url, {
+          method: method,
+          data: data,
+          beforeSend: function(xhr) {
+            xhr.setRequestHeader("Authorization", "Bearer " + accessToken());
+          }
+        }).done(function(data, textStatus, xhr) {
+          $("#response_area").html(JSON.stringify(data));
+          $("#response").show()
+        }).fail(function(xhr, textStatus, errorThrown) {
+          console.log(xhr);
+          console.log(textStatus);
+          console.log(errorThrown);
+
+          $("#response_area").html("An error occured, check the console.");
+          $("#response").show()
+        }).complete(function() {
+          spinner.hide();
+          $("#authorize").show();
+        });
+      }
+
+      $(document).ready(function() {
+        var error = getHashParameter("error");
+
+        if(error) {
+          $("#error").html(getHashParameter("error_description"));
+        } else if(token) {
+          $("#token").html("Token: " + accessToken());
+          $("#scope").html("Scope: " + tokenScope());
+        }
+
+        $('#read').click(function () {
+          makeRequest('https://dev.zd-dev.com/api/v2/tickets.json', 'GET');
+        });
+
+
+        $('#write').click(function () {
+          var data = {"ticket": {"subject": "My printer is on fire!", "comment": { "body": "The smoke is very colorful." }}}
+          makeRequest('https://dev.zd-dev.com/api/v2/tickets.json', 'POST', data);
+        });
+      });
+    </script>
   </body>
 </html>
