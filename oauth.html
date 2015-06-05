@@ -1,55 +1,80 @@
 <html>
   <head>
-    <title>OAuth Grant Test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>OAuth Scope Test</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    <style>
+      body {
+        padding-top: 70px;
+        padding-bottom: 30px;
+      }
+
+      .jumbotron {
+        padding-top: 5px;
+        padding-bottom: 5px;
+      }
+    </style>
   </head>
 
-  <body>
-    <h3>Setup:</h3>
-    <ul>
-      <li>This only works locally, so make sure zendesk is running under https://dev.zd-dev.com/</li>
-      <li>Create a new OAuth app</li>
-      <li>The default identifier is html_example</li>
-      <li>The return URI should be https://anamartinez.github.io/oauth</li>
-    </ul>
+  <body role="document">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">OAuth Scope Tester</a>
+        </div>
+      </div>
+    </nav>
 
-    <form action="https://dev.zd-dev.com/oauth/authorizations/new" id="authorize" method="GET">
-      <input type="hidden" name="redirect_uri" value="https://anamartinez.github.io/oauth" />
-      <input type="hidden" name="response_type" value="token" />
+    <div class="container theme-showcase" role="main">
+      <div class="jumbotron">
+        <h3>Setup:</h3>
+        <ul>
+          <li>This only works locally, so make sure zendesk is running under https://dev.zd-dev.com/</li>
+          <li>Create a new OAuth app</li>
+          <li>The default identifier is html_example</li>
+          <li>The return URI should be https://anamartinez.github.io/oauth</li>
+        </ul>
+      </div>
 
-      <label>Client ID</label>
-      <input type="text" name="client_id" value="html_example">
+      <form action="https://dev.zd-dev.com/oauth/authorizations/new" id="authorize" method="GET">
+        <input type="hidden" name="redirect_uri" value="https://anamartinez.github.io/oauth" />
+        <input type="hidden" name="response_type" value="token" />
 
-      </br>
-      </br>
+        <label>Client ID</label>
+        <input type="text" name="client_id" value="html_example">
 
-      <label>Scope</label>
-      <input type="text" name="scope" value="read write" />
+        </br>
+        </br>
 
-      </br>
-      </br>
+        <label>Scope</label>
+        <input type="text" name="scope" value="read write" />
 
-      <input type="submit" value="Authorize!" />
-    </form>
+        </br>
+        </br>
 
-    <p id="error"></p>
-    <p id="token"></p>
-    <p id="scope"></p>
+        <input type="submit" value="Authorize!" />
+      </form>
 
-    <p> Test requests </p>
-    <button id="read">READ</button>
-    <button id="write">WRITE</button>
+      <p id="error"></p>
+      <p id="token"></p>
+      <p id="scope"></p>
+
+      <p> Test requests </p>
+      <button id="read">READ</button>
+      <button id="write">WRITE</button>
 
 
-    <p id="response" style="display: none;">
-      <span style="float: left; margin-right: 10px;">Response:</span>
-      <p id="response_area" style="width: 500px; height:200px;"></p>
-    </p>
+      <p id="response" style="display: none;">
+        <span style="float: left; margin-right: 10px;">Response:</span>
+        <p id="response_area" style="width: 500px; height:200px;"></p>
+      </p>
 
-    <img id="spinner" src="https://raw.github.com/sjhcockrell/spinners/master/gif/spinner_16.gif" style="display:none;" />
+      <img id="spinner" src="https://raw.github.com/sjhcockrell/spinners/master/gif/spinner_16.gif" style="display:none;" />
+    </div>
 
     <script type="text/javascript">
       // http://stackoverflow.com/questions/1403888/get-url-parameter-with-jquery
