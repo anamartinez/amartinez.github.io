@@ -23,6 +23,14 @@
         border-top: 1px solid #eee;
       }
 
+      #api_response {
+        display: none;
+        margin-top: 10px;
+      }
+
+      #spinner {
+        display: none;
+      }
     </style>
   </head>
 
@@ -66,10 +74,17 @@
         <button id="read" class="btn btn-lg btn-primary">READ</button>
         <button id="write" class="btn btn-lg btn-primary">WRITE</button>
 
-        <p id="response" style="display: none;">
-          <span style="float: left; margin-right: 10px;">Response:</span>
-          <p id="response_area" style="width: 500px; height:200px;"></p>
-        </p>
+        <div class="panel panel-default" id="api_response">
+          <div class="panel-heading">
+            <h3 class="panel-title">API Response</h3>
+          </div>
+
+          <div class="panel-body">
+            <img id="spinner" src="https://raw.github.com/sjhcockrell/spinners/master/gif/spinner_16.gif" />
+
+            <p id="response_area"></p>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -88,8 +103,8 @@
       }
 
       function makeRequest(url, method, data) {
-        var spinner = $("#spinner");
-        spinner.show();
+        $("#api_response").show();
+        $("#spinner").show();
 
         $.ajax(url, {
           method: method,
@@ -98,18 +113,15 @@
             xhr.setRequestHeader("Authorization", "Bearer " + accessToken());
           }
         }).done(function(data, textStatus, xhr) {
-          $("#response_area").html(JSON.stringify(data));
-          $("#response").show()
+          $("#response_area").html(JSON.stringify(data, null, 4));
         }).fail(function(xhr, textStatus, errorThrown) {
           console.log(xhr);
           console.log(textStatus);
           console.log(errorThrown);
 
           $("#response_area").html("An error occured, check the console.");
-          $("#response").show()
         }).complete(function() {
-          spinner.hide();
-          $("#authorize").show();
+          $("#spinner").hide();
         });
       }
 
