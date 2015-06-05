@@ -5,11 +5,23 @@
   </head>
 
   <body>
-    <p id="text"></p>
+    <p id="error"></p>
+    <p id="token"></p>
+    <p id="scope"></p>
+
+    <p> Test requests </p>
+    <div id="read">
+      <button class="request">READ</button>
+      <p class="response_area"></p>
+    </div>
+
+
     <p id="response" style="display: none;">
       <span style="float: left; margin-right: 10px;">Response:</span>
       <p id="response_area" style="width: 500px; height:200px;"></p>
     </p>
+
+
 
     <img id="spinner" src="https://raw.github.com/sjhcockrell/spinners/master/gif/spinner_16.gif" style="display:none;" />
 
@@ -22,12 +34,14 @@
       $(document).ready(function() {
           var error = getHashParameter("error");
           var token = getHashParameter("access_token");
+          var scope = getHashParameter("scope");
 
           if(error) {
-            $("#text").html(getHashParameter("error_description"));
-            $("#authorize").show();
+            $("#error").html(getHashParameter("error_description"));
+//            $("#authorize").show();
           } else if(token) {
-            $("#text").html("Received token: " + token + ". Initiating OAuth ticket request.");
+            $("#text").html("Token: " + token);
+            $("#scope").html("Scope: " + scope);
 
             var spinner = $("#spinner");
             spinner.show();
