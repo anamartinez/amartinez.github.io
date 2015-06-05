@@ -19,8 +19,6 @@
       <p id="response_area" style="width: 500px; height:200px;"></p>
     </p>
 
-
-
     <img id="spinner" src="https://raw.github.com/sjhcockrell/spinners/master/gif/spinner_16.gif" style="display:none;" />
 
     <script type="text/javascript">
@@ -30,43 +28,41 @@
       }
 
       $(document).ready(function() {
-          var error = getHashParameter("error");
-          var token = getHashParameter("access_token");
-          var scope = getHashParameter("scope");
+        var error = getHashParameter("error");
+        var token = getHashParameter("access_token");
+        var scope = getHashParameter("scope");
 
-          if(error) {
-            $("#error").html(getHashParameter("error_description"));
+        if(error) {
+          $("#error").html(getHashParameter("error_description"));
 //            $("#authorize").show();
-          } else if(token) {
-            $("#token").html("Token: " + token);
-            $("#scope").html("Scope: " + scope);
+        } else if(token) {
+          $("#token").html("Token: " + token);
+          $("#scope").html("Scope: " + scope);
+        }
 
-            var spinner = $("#spinner");
-            spinner.show();
+        $('#read').click(function () {
+          var spinner = $("#spinner");
+          spinner.show();
 
-      //Make the call to the v2 API with your token in the header
-            $.ajax('https://dev.zd-dev.com/api/v2/tickets.json', {
-              method: 'GET',
-              beforeSend: function(xhr) {
-                xhr.setRequestHeader("Authorization", "Bearer " + token);              }
-            }).done(function(data, textStatus, xhr) {
-              $("#response_area").html(JSON.stringify(data));
-              $("#response").show()
-            }).fail(function(xhr, textStatus, errorThrown) {
-              console.log(xhr);
-              console.log(textStatus);
-              console.log(errorThrown);
+          $.ajax('https://dev.zd-dev.com/api/v2/tickets.json', {
+            method: 'GET',
+            beforeSend: function(xhr) {
+              xhr.setRequestHeader("Authorization", "Bearer " + token);              }
+          }).done(function(data, textStatus, xhr) {
+            $("#response_area").html(JSON.stringify(data));
+            $("#response").show()
+          }).fail(function(xhr, textStatus, errorThrown) {
+            console.log(xhr);
+            console.log(textStatus);
+            console.log(errorThrown);
 
-              $("#response_area").html("An error occured, check the console.");
-              $("#response").show()
-            }).complete(function() {
-              spinner.hide();
-              $("#authorize").show();
-            });
-
-          } else {
+            $("#response_area").html("An error occured, check the console.");
+            $("#response").show()
+          }).complete(function() {
+            spinner.hide();
             $("#authorize").show();
-          }
+          });
+        });
       });
     </script>
   </body>
