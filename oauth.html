@@ -14,8 +14,12 @@
       }
 
       .jumbotron {
-        padding-top: 5px;
+        padding-top: 3px;
         padding-bottom: 5px;
+      }
+
+      #api_request {
+        display: none;
       }
     </style>
   </head>
@@ -34,46 +38,39 @@
         <h3>Setup:</h3>
         <ul>
           <li>This only works locally, so make sure zendesk is running under https://dev.zd-dev.com/</li>
-          <li>Create a new OAuth app</li>
-          <li>The default identifier is html_example</li>
-          <li>The return URI should be https://anamartinez.github.io/oauth</li>
+          <li>Create a new OAuth app with:
+            <ul>
+              <li>Identifier: <b>html_example</b></li>
+              <li>Return URI: <b>https://anamartinez.github.io/oauth</b></li>
+            </ul>
+          </li>
         </ul>
       </div>
 
       <form action="https://dev.zd-dev.com/oauth/authorizations/new" id="authorize" method="GET">
         <input type="hidden" name="redirect_uri" value="https://anamartinez.github.io/oauth" />
         <input type="hidden" name="response_type" value="token" />
+        <input type="hidden" name="client_id" value="html_example">
 
-        <label>Client ID</label>
-        <input type="text" name="client_id" value="html_example">
-
-        </br>
-        </br>
-
-        <label>Scope</label>
-        <input type="text" name="scope" value="read write" />
-
-        </br>
-        </br>
-
-        <input type="submit" value="Authorize!" />
+        <label>Scopes separated by a space: </label> <input type="text" name="scope" value="read write" /> <input type="submit" value="Give me a token!" class="btn btn-sm btn-primary" />
       </form>
 
-      <p id="error"></p>
-      <p id="token"></p>
-      <p id="scope"></p>
+      <div id="api_request">
+        <p id="error"></p>
+        <p id="token"></p>
+        <p id="scope"></p>
 
-      <p> Test requests </p>
-      <button id="read">READ</button>
-      <button id="write">WRITE</button>
+        <p> Test requests </p>
+        <button id="read">READ</button>
+        <button id="write">WRITE</button>
 
+        <p id="response" style="display: none;">
+          <span style="float: left; margin-right: 10px;">Response:</span>
+          <p id="response_area" style="width: 500px; height:200px;"></p>
+        </p>
 
-      <p id="response" style="display: none;">
-        <span style="float: left; margin-right: 10px;">Response:</span>
-        <p id="response_area" style="width: 500px; height:200px;"></p>
-      </p>
-
-      <img id="spinner" src="https://raw.github.com/sjhcockrell/spinners/master/gif/spinner_16.gif" style="display:none;" />
+        <img id="spinner" src="https://raw.github.com/sjhcockrell/spinners/master/gif/spinner_16.gif" style="display:none;" />
+      </div>
     </div>
 
     <script type="text/javascript">
@@ -121,9 +118,11 @@
 
         if(error) {
           $("#error").html(getHashParameter("error_description"));
-        } else if(token) {
+        } else if(token.length) {
           $("#token").html("Token: " + accessToken());
           $("#scope").html("Scope: " + tokenScope());
+
+          $("#api_request").show();
         }
 
         $('#read').click(function () {
