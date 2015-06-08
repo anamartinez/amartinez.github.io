@@ -73,6 +73,7 @@
         <h3> Test scopes: </h3>
         <button id="read" class="btn btn-lg btn-primary">READ</button>
         <button id="write" class="btn btn-lg btn-primary">WRITE</button>
+        <button id="read_ticket" class="btn btn-lg btn-primary">READ</button>
 
         <div class="panel panel-default" id="api_response">
           <div class="panel-heading">
@@ -119,7 +120,7 @@
           console.log(textStatus);
           console.log(errorThrown);
 
-          $("#response_area").html("An error occured, check the console.");
+          $("#response_area").html(errorThrown);
         }).complete(function() {
           $("#spinner").hide();
         });
@@ -137,7 +138,7 @@
           $("#api_request").show();
         }
 
-        $('#read').click(function () {
+        $('#read_ticket').click(function () {
           makeRequest('https://dev.zd-dev.com/api/v2/tickets.json', 'GET');
         });
 
@@ -145,6 +146,10 @@
         $('#write').click(function () {
           var data = {"ticket": {"subject": "My printer is on fire!", "comment": { "body": "The smoke is very colorful." }}}
           makeRequest('https://dev.zd-dev.com/api/v2/tickets.json', 'POST', data);
+        });
+
+        $('#read').click(function() {
+          makeRequest('https://dev.zd-dev.com/api/v2/organizations.json', 'GET');
         });
       });
     </script>
