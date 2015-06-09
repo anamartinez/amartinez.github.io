@@ -75,6 +75,8 @@
         <button id="write" class="btn btn-lg btn-primary">WRITE</button>
         <button id="read_ticket" class="btn btn-lg btn-primary">TICKETS:READ</button>
         <button id="write_ticket" class="btn btn-lg btn-primary">TICKETS:WRITE</button>
+        <button id="read_user" class="btn btn-lg btn-primary">USERS:READ</button>
+        <button id="write_user" class="btn btn-lg btn-primary">USERS:WRITE</button>
 
         <div class="panel panel-default" id="api_response">
           <div class="panel-heading">
@@ -148,13 +150,22 @@
           makeRequest('https://dev.zd-dev.com/api/v2/tickets.json', 'POST', data);
         });
 
+        $('#read_user').click(function () {
+          makeRequest('https://dev.zd-dev.com/api/v2/users.json', 'GET');
+        });
+
+        $('#write_user').click(function () {
+          var data = {"user": {"name": "Roger Wilco", "email": "roge@example.org"}};
+          makeRequest('https://dev.zd-dev.com/api/v2/users.json', 'POST', data);
+        });
+
         $('#write').click(function () {
           var data = {"organization": {"name": "My Organization"}}
           makeRequest('https://dev.zd-dev.com/api/v2/organizations.json', 'POST', data);
         });
 
         $('#read').click(function() {
-          makeRequest('https://dev.zd-dev.com/api/v2/users.json', 'GET');
+          makeRequest('https://dev.zd-dev.com/api/v2/organizations.json', 'GET');
         });
       });
     </script>
