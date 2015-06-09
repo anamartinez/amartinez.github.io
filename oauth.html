@@ -62,7 +62,7 @@
         <input type="hidden" name="response_type" value="token" />
         <input type="hidden" name="client_id" value="html_example">
 
-        <label>Scopes separated by a space: </label> <input type="text" name="scope" value="read write" /> <input type="submit" value="Give me a token!" class="btn btn-sm btn-primary" />
+        <label>Scopes separated by a space: </label> <input type="text" name="scope" placeholder="read write tickets:write" /> <input type="submit" value="Give me a token!" class="btn btn-sm btn-primary" />
       </form>
 
       <div id="api_request">
@@ -74,6 +74,7 @@
         <button id="read" class="btn btn-lg btn-primary">READ</button>
         <button id="write" class="btn btn-lg btn-primary">WRITE</button>
         <button id="read_ticket" class="btn btn-lg btn-primary">TICKETS:READ</button>
+        <button id="write_ticket" class="btn btn-lg btn-primary">TICKETS:WRITE</button>
 
         <div class="panel panel-default" id="api_response">
           <div class="panel-heading">
@@ -142,10 +143,14 @@
           makeRequest('https://dev.zd-dev.com/api/v2/tickets.json', 'GET');
         });
 
-
-        $('#write').click(function () {
+        $('#write_ticket').click(function () {
           var data = {"ticket": {"subject": "My printer is on fire!", "comment": { "body": "The smoke is very colorful." }}}
           makeRequest('https://dev.zd-dev.com/api/v2/tickets.json', 'POST', data);
+        });
+
+        $('#write').click(function () {
+          var data = {"organization": {"name": "My Organization"}}
+          makeRequest('https://dev.zd-dev.com/api/v2/organization.json', 'POST', data);
         });
 
         $('#read').click(function() {
