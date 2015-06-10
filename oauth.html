@@ -73,12 +73,13 @@
         <h3> Test scopes: </h3>
         <button id="read" class="btn btn-lg btn-primary">READ</button>
         <button id="write" class="btn btn-lg btn-primary">WRITE</button>
-        <button id="read_ticket" class="btn btn-lg btn-primary">TICKETS:READ</button>
-        <button id="write_ticket" class="btn btn-lg btn-primary">TICKETS:WRITE</button>
+        <button id="read_ticket" class="btn btn-lg btn-primary">tickets:read</button>
+        <button id="write_ticket" class="btn btn-lg btn-primary">tickets:write</button>
         <button id="read_user" class="btn btn-lg btn-primary">users:read</button>
         <button id="write_user" class="btn btn-lg btn-primary">users:write</button>
         <button id="read_organization" class="btn btn-lg btn-primary">organizations:read</button>
         <button id="write_organization" class="btn btn-lg btn-primary">organizations:write</button>
+        <button id="read_audit_log" class="btn btn-lg btn-primary">auditlogs:read</button>
 
         <div class="panel panel-default" id="api_response">
           <div class="panel-heading">
@@ -168,6 +169,10 @@
 
         $('#read_organization').click(function() {
           makeRequest('https://dev.zd-dev.com/api/v2/organizations.json', 'GET');
+        });
+
+        $('#read_audit_log').click(function() {
+          makeRequest('https://dev.zd-dev.com/api/v2/audit_logs.json', 'GET');
         });
 
         $('#write').click(function () {
