@@ -145,43 +145,43 @@
         }
 
         $('#read_ticket').click(function () {
-          makeRequest('https://dev.zd-dev.com/api/v2/tickets.json', 'GET');
+          makeRequest('https://z3nankit.zendesk.com/api/v2/tickets.json', 'GET');
         });
 
         $('#write_ticket').click(function () {
           var data = {"ticket": {"subject": "My printer is on fire!", "comment": { "body": "The smoke is very colorful." }}}
-          makeRequest('https://dev.zd-dev.com/api/v2/tickets.json', 'POST', data);
+          makeRequest('https://z3nankit.zendesk.com/api/v2/tickets.json', 'POST', data);
         });
 
         $('#read_user').click(function () {
-          makeRequest('https://dev.zd-dev.com/api/v2/users.json', 'GET');
+          makeRequest('https://z3nankit.zendesk.com/api/v2/users.json', 'GET');
         });
 
         $('#write_user').click(function () {
           var data = {"user": {"name": "Roger Wilco", "email": "roge@example.org"}};
-          makeRequest('https://dev.zd-dev.com/api/v2/users.json', 'POST', data);
+          makeRequest('https://z3nankit.zendesk.com/api/v2/users.json', 'POST', data);
         });
 
         $('#write_organization').click(function () {
           var data = {"organization": {"name": "My Organization"}}
-          makeRequest('https://dev.zd-dev.com/api/v2/organizations.json', 'POST', data);
+          makeRequest('https://z3nankit.zendesk.com/api/v2/organizations.json', 'POST', data);
         });
 
         $('#read_organization').click(function() {
-          makeRequest('https://dev.zd-dev.com/api/v2/organizations.json', 'GET');
+          makeRequest('https://z3nankit.zendesk.com/api/v2/organizations.json', 'GET');
         });
 
         $('#read_audit_log').click(function() {
-          makeRequest('https://dev.zd-dev.com/api/v2/audit_logs.json', 'GET');
+          makeRequest('https://z3nankit.zendesk.com/api/v2/audit_logs.json', 'GET');
         });
 
         $('#write').click(function () {
           var data = {"group": {"name": "My Group"}}
-          makeRequest('https://dev.zd-dev.com/api/v2/groups.json', 'POST', data);
+          makeRequest('https://z3nankit.zendesk.com/api/v2/groups.json', 'POST', data);
         });
 
         $('#read').click(function() {
-          makeRequest('https://dev.zd-dev.com/api/v2/groups.json', 'GET');
+          makeRequest('https://z3nankit.zendesk.com/api/v2/groups.json', 'GET');
         });
       });
     </script>
