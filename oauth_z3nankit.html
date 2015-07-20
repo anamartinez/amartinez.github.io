@@ -1,0 +1,189 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>OAuth Scope Test</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    <style>
+      body {
+        padding-top: 70px;
+        padding-bottom: 30px;
+      }
+
+      .jumbotron {
+        padding-top: 3px;
+        padding-bottom: 5px;
+      }
+
+      #api_request {
+        display: none;
+        border-top: 1px solid #eee;
+      }
+
+      #api_response {
+        display: none;
+        margin-top: 10px;
+      }
+
+      #spinner {
+        display: none;
+      }
+    </style>
+  </head>
+
+  <body role="document">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">OAuth Scope Tester</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container theme-showcase" role="main">
+      <div class="jumbotron">
+        <h3>Setup:</h3>
+        <ul>
+          <li>This only works locally, so make sure zendesk is running under https://dev.zd-dev.com/</li>
+          <li>Create a new OAuth app with:
+            <ul>
+              <li>Identifier: <b>html_example</b></li>
+              <li>Return URI: <b>https://anamartinez.github.io/oauth</b></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <form action="https://z3nankit.zendesk.com/oauth/authorizations/new" id="authorize" method="GET">
+        <input type="hidden" name="redirect_uri" value="https://anamartinez.github.io/oauth_z3nankit" />
+        <input type="hidden" name="response_type" value="token" />
+        <input type="hidden" name="client_id" value="html_example">
+
+        <label>Scopes separated by a space: </label> <input type="text" name="scope" placeholder="read write tickets:write" /> <input type="submit" value="Give me a token!" class="btn btn-sm btn-primary" />
+      </form>
+
+      <div id="api_request">
+        <p id="error"></p>
+        <h4 id="token"></h4>
+        <h4 id="scope"></h4>
+
+        <h3> Test scopes: </h3>
+        <button id="read" class="btn btn-lg btn-primary">READ</button>
+        <button id="write" class="btn btn-lg btn-primary">WRITE</button>
+        <button id="read_ticket" class="btn btn-lg btn-primary">tickets:read</button>
+        <button id="write_ticket" class="btn btn-lg btn-primary">tickets:write</button>
+        <button id="read_user" class="btn btn-lg btn-primary">users:read</button>
+        <button id="write_user" class="btn btn-lg btn-primary">users:write</button>
+        <button id="read_organization" class="btn btn-lg btn-primary">organizations:read</button>
+        <button id="write_organization" class="btn btn-lg btn-primary">organizations:write</button>
+        <button id="read_audit_log" class="btn btn-lg btn-primary">auditlogs:read</button>
+
+        <div class="panel panel-default" id="api_response">
+          <div class="panel-heading">
+            <h3 class="panel-title">API Response</h3>
+          </div>
+
+          <div class="panel-body">
+            <img id="spinner" src="https://raw.github.com/sjhcockrell/spinners/master/gif/spinner_16.gif" />
+
+            <p id="response_area"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      // http://stackoverflow.com/questions/1403888/get-url-parameter-with-jquery
+      function getHashParameter(name) {
+        return decodeURIComponent((new RegExp('[#|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.hash)||[,""])[1].replace(/\+/g, '%20'))||null;
+      }
+
+      function accessToken() {
+        return getHashParameter("access_token");
+      }
+
+      function tokenScope() {
+        return getHashParameter("scope");
+      }
+
+      function makeRequest(url, method, data) {
+        $("#api_response").show();
+        $("#spinner").show();
+
+        $.ajax(url, {
+          method: method,
+          data: data,
+          beforeSend: function(xhr) {
+            xhr.setRequestHeader("Authorization", "Bearer " + accessToken());
+          }
+        }).done(function(data, textStatus, xhr) {
+          $("#response_area").html(JSON.stringify(data, null, 4));
+        }).fail(function(xhr, textStatus, errorThrown) {
+          console.log(xhr);
+          console.log(textStatus);
+          console.log(errorThrown);
+
+          $("#response_area").html(textStatus);
+        }).complete(function() {
+          $("#spinner").hide();
+        });
+      }
+
+      $(document).ready(function() {
+        var error = getHashParameter("error");
+
+        if(error) {
+          $("#error").html(getHashParameter("error_description"));
+        } else if(accessToken().length) {
+          $("#token").html("Token: " + accessToken() );
+          $("#scope").html("Scope: " + tokenScope());
+
+          $("#api_request").show();
+        }
+
+        $('#read_ticket').click(function () {
+          makeRequest('https://dev.zd-dev.com/api/v2/tickets.json', 'GET');
+        });
+
+        $('#write_ticket').click(function () {
+          var data = {"ticket": {"subject": "My printer is on fire!", "comment": { "body": "The smoke is very colorful." }}}
+          makeRequest('https://dev.zd-dev.com/api/v2/tickets.json', 'POST', data);
+        });
+
+        $('#read_user').click(function () {
+          makeRequest('https://dev.zd-dev.com/api/v2/users.json', 'GET');
+        });
+
+        $('#write_user').click(function () {
+          var data = {"user": {"name": "Roger Wilco", "email": "roge@example.org"}};
+          makeRequest('https://dev.zd-dev.com/api/v2/users.json', 'POST', data);
+        });
+
+        $('#write_organization').click(function () {
+          var data = {"organization": {"name": "My Organization"}}
+          makeRequest('https://dev.zd-dev.com/api/v2/organizations.json', 'POST', data);
+        });
+
+        $('#read_organization').click(function() {
+          makeRequest('https://dev.zd-dev.com/api/v2/organizations.json', 'GET');
+        });
+
+        $('#read_audit_log').click(function() {
+          makeRequest('https://dev.zd-dev.com/api/v2/audit_logs.json', 'GET');
+        });
+
+        $('#write').click(function () {
+          var data = {"group": {"name": "My Group"}}
+          makeRequest('https://dev.zd-dev.com/api/v2/groups.json', 'POST', data);
+        });
+
+        $('#read').click(function() {
+          makeRequest('https://dev.zd-dev.com/api/v2/groups.json', 'GET');
+        });
+      });
+    </script>
+  </body>
+</html>
